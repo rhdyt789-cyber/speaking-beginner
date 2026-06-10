@@ -1,0 +1,128 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About My Family - Writing Exercise</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background:#f4f6f9;
+}
+
+.container{
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+
+h1,h2{
+    color:#2c3e50;
+}
+
+textarea{
+    width:100%;
+    min-height:120px;
+    padding:10px;
+    margin-top:10px;
+}
+
+input{
+    padding:8px;
+    margin:5px;
+}
+
+button{
+    background:#3498db;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#2980b9;
+}
+
+.correct{
+    color:green;
+    font-weight:bold;
+}
+
+.wrong{
+    color:red;
+    font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<hr>
+
+<h2>Part A: Fill in the blanks</h2>
+
+<p>1. Kelly lives in
+<input id="q1"></p>
+
+<p>2. Kelly's mother's name is
+<input id="q2"></p>
+
+<p>3. Kelly's father works in a
+<input id="q3"></p>
+
+<p>4. Kelly's sister loves listening to
+<input id="q4"></p>
+
+<p>5. Brandy is a pet
+<input id="q5"></p>
+
+<button onclick="checkAnswers()">Check Answers</button>
+
+<p id="result"></p>
+
+<hr>
+
+<h2>Part B: Write About Your Family</h2>
+
+<p>Write 5–8 sentences about your family.</p>
+
+<textarea placeholder="My name is..."></textarea>
+
+</div>
+
+<script>
+function checkAnswers(){
+
+let score = 0;
+
+const answers = {
+q1:"california",
+q2:"carmen",
+q3:"bank",
+q4:"music",
+q5:"dog"
+};
+
+for(let id in answers){
+let user = document.getElementById(id).value.trim().toLowerCase();
+
+if(user === answers[id]){
+score++;
+}
+}
+
+document.getElementById("result").innerHTML =
+"You got " + score + " out of 5 correct!";
+}
+</script>
+
+</body>
+</html>
