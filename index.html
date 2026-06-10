@@ -3,61 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About My Family - Writing Exercise</title>
+<title>SALL Speaking Exercise</title>
 
 <style>
 body{
     font-family: Arial, sans-serif;
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
-    background:#f4f6f9;
+    background:#f4f7fc;
+    margin:0;
+    padding:20px;
 }
 
 .container{
+    max-width:900px;
+    margin:auto;
     background:white;
-    padding:25px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,.1);
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,0.1);
 }
 
-h1,h2{
+h1{
+    text-align:center;
     color:#2c3e50;
 }
 
-textarea{
-    width:100%;
-    min-height:120px;
-    padding:10px;
-    margin-top:10px;
-}
-
-input{
-    padding:8px;
-    margin:5px;
+.section{
+    margin-top:25px;
+    padding:20px;
+    background:#eef5ff;
+    border-radius:10px;
 }
 
 button{
+    padding:12px 20px;
     background:#3498db;
     color:white;
     border:none;
-    padding:12px 20px;
-    border-radius:5px;
+    border-radius:8px;
     cursor:pointer;
+    font-size:16px;
+    margin-top:10px;
 }
 
 button:hover{
     background:#2980b9;
 }
 
-.correct{
-    color:green;
-    font-weight:bold;
+audio{
+    width:100%;
+    margin-top:15px;
 }
 
-.wrong{
-    color:red;
-    font-weight:bold;
+textarea{
+    width:100%;
+    height:120px;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    margin-top:10px;
+}
+
+#result{
+    margin-top:20px;
+    padding:15px;
+    background:#dff0d8;
+    border-radius:8px;
+}
+
+.student-info{
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
 }
 </style>
 </head>
@@ -65,62 +83,179 @@ button:hover{
 
 <div class="container">
 
-<hr>
+<h1>SALL Speaking Exercise</h1>
 
-<h2>Part A: Fill in the blanks</h2>
+<div class="section">
+<h2>Student Information</h2>
 
-<p>1. Kelly lives in
-<input id="q1"></p>
+<input type="text" id="name" class="student-info" placeholder="Enter Your Name">
 
-<p>2. Kelly's mother's name is
-<input id="q2"></p>
+<input type="text" id="studentid" class="student-info" placeholder="Enter Student ID">
+</div>
 
-<p>3. Kelly's father works in a
-<input id="q3"></p>
+<div class="section">
+<h2>Learning Material</h2>
 
-<p>4. Kelly's sister loves listening to
-<input id="q4"></p>
+<p><strong>Useful Expressions:</strong></p>
 
-<p>5. Brandy is a pet
-<input id="q5"></p>
+<ul>
+<li>Hello, my name is ...</li>
+<li>I am ... years old.</li>
+<li>I live in ...</li>
+<li>My hobby is ...</li>
+<li>Nice to meet you.</li>
+</ul>
 
-<button onclick="checkAnswers()">Check Answers</button>
+<p><strong>Example:</strong></p>
 
-<p id="result"></p>
+<p>
+Hello. My name is Anna.
+I am 18 years old.
+I live in Bali.
+My hobby is reading books.
+Nice to meet you.
+</p>
+</div>
 
-<hr>
+<div class="section">
+<h2>Speaking Task</h2>
 
-<h2>Part B: Write About Your Family</h2>
+<p>Record yourself answering the following questions:</p>
 
-<p>Write 5–8 sentences about your family.</p>
+<ol>
+<li>What is your name?</li>
+<li>How old are you?</li>
+<li>Where do you live?</li>
+<li>What is your hobby?</li>
+</ol>
 
-<textarea placeholder="My name is..."></textarea>
+<button id="start">🎤 Start Recording</button>
+<button id="stop">⏹ Stop Recording</button>
+
+<audio id="audio" controls></audio>
+</div>
+
+<div class="section">
+<h2>Reflection</h2>
+
+<textarea id="reflection" placeholder="Write what you learned from this activity..."></textarea>
+</div>
+
+<div class="section">
+<h2>Self-Assessment Checklist</h2>
+
+<label>
+<input type="checkbox" id="clear">
+I spoke clearly.
+</label>
+<br><br>
+
+<label>
+<input type="checkbox" id="sentences">
+I used complete sentences.
+</label>
+<br><br>
+
+<label>
+<input type="checkbox" id="questions">
+I answered all questions.
+</label>
+<br><br>
+
+<button onclick="submitExercise()">Submit Exercise</button>
+
+<div id="result"></div>
+</div>
 
 </div>
 
 <script>
-function checkAnswers(){
 
-let score = 0;
+let mediaRecorder;
+let audioChunks=[];
 
-const answers = {
-q1:"california",
-q2:"carmen",
-q3:"bank",
-q4:"music",
-q5:"dog"
+const startBtn=document.getElementById("start");
+const stopBtn=document.getElementById("stop");
+const audio=document.getElementById("audio");
+
+startBtn.onclick=async()=>{
+
+    const stream=await navigator.mediaDevices.getUserMedia({
+        audio:true
+    });
+
+    mediaRecorder=new MediaRecorder(stream);
+
+    mediaRecorder.start();
+
+    audioChunks=[];
+
+    mediaRecorder.ondataavailable=(event)=>{
+        audioChunks.push(event.data);
+    };
+
+    mediaRecorder.onstop=()=>{
+        const blob=new Blob(audioChunks,{
+            type:"audio/webm"
+        });
+
+        const url=URL.createObjectURL(blob);
+
+        audio.src=url;
+    };
 };
 
-for(let id in answers){
-let user = document.getElementById(id).value.trim().toLowerCase();
+stopBtn.onclick=()=>{
+    if(mediaRecorder){
+        mediaRecorder.stop();
+    }
+};
 
-if(user === answers[id]){
-score++;
-}
-}
+function submitExercise(){
 
-document.getElementById("result").innerHTML =
-"You got " + score + " out of 5 correct!";
+    const name=document.getElementById("name").value;
+    const studentid=document.getElementById("studentid").value;
+
+    if(name==="" || studentid===""){
+        alert("Please enter your name and student ID.");
+        return;
+    }
+
+    let score=0;
+
+    if(document.getElementById("clear").checked){
+        score++;
+    }
+
+    if(document.getElementById("sentences").checked){
+        score++;
+    }
+
+    if(document.getElementById("questions").checked){
+        score++;
+    }
+
+    const percentage=(score/3)*100;
+
+    let feedback="";
+
+    if(percentage===100){
+        feedback="Excellent! Your speaking task is complete.";
+    }
+    else if(percentage>=67){
+        feedback="Good job! Keep practicing your speaking skills.";
+    }
+    else{
+        feedback="Please continue practicing and try again.";
+    }
+
+    document.getElementById("result").innerHTML=`
+        <h3>Exercise Submitted Successfully</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Student ID:</strong> ${studentid}</p>
+        <p><strong>Score:</strong> ${score}/3 (${percentage}%)</p>
+        <p><strong>Feedback:</strong> ${feedback}</p>
+    `;
 }
 </script>
 
